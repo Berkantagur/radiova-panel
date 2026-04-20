@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radiova | TEKNOFEST EH 2026 Görev Yönetimi</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e17;
+  --bg-card: #111827;
+  --bg-card-hover: #1a2332;
+  --bg-input: #0d1320;
+  --border: #1e2d3d;
+  --border-active: #3b82f6;
+  --text: #e2e8f0;
+  --text-dim: #64748b;
+  --text-muted: #475569;
+  --accent: #3b82f6;
+  --accent-glow: rgba(59,130,246,0.15);
+  --red: #ef4444;
+  --red-bg: rgba(239,68,68,0.1);
+  --orange: #f97316;
+  --orange-bg: rgba(249,115,22,0.1);
+  --green: #22c55e;
+  --green-bg: rgba(34,197,94,0.1);
+  --yellow: #eab308;
+  --yellow-bg: rgba(234,179,8,0.1);
+  --purple: #a855f7;
+  --purple-bg: rgba(168,85,247,0.1);
+  --cyan: #06b6d4;
+  --cyan-bg: rgba(6,182,212,0.1);
+  --radius: 10px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: linear-gradient(135deg, #0f1729 0%, #162033 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo .dot {
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.logo-sub {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-select {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+}
+.user-select:focus { border-color: var(--accent); }
+
+.stats-bar {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.stat-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* ===== MAIN LAYOUT ===== */
+.main {
+  display: grid;
+  grid-template-columns: 280px 1fr 340px;
+  height: calc(100vh - 64px);
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.sidebar-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: default;
+  transition: background 0.15s;
+}
+
+.timeline-item:hover {
+  background: var(--bg-card-hover);
+}
+
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.timeline-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.team-member {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  cursor: default;
+}
+
+.member-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 11px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* ===== CONTENT ===== */
+.content {
+  padding: 24px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.content-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.content-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  padding: 3px;
+  border: 1px solid var(--border);
+}
+
+.filter-tab {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-dim);
+  border: none;
+  background: none;
+  font-family: 'Outfit', sans-serif;
+  transition: all 0.15s;
+}
+
+.filter-tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.filter-tab:hover:not(.active) {
+  color: var(--text);
+}
+
+/* ===== TASK CARDS ===== */
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.task-card:hover {
+  border-color: var(--border-active);
+  background: var(--bg-card-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+.task-card.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 4px 20px rgba(59,130,246,0.15);
+}
+
+.task-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.task-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  flex: 1;
+  margin-right: 12px;
+}
+
+.priority-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.priority-acil { background: var(--red-bg); color: var(--red); }
+.priority-yuksek { background: var(--orange-bg); color: var(--orange); }
+.priority-orta { background: var(--yellow-bg); color: var(--yellow); }
+.priority-dusuk { background: var(--green-bg); color: var(--green); }
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.task-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.task-meta-item svg {
+  width: 13px;
+  height: 13px;
+  opacity: 0.6;
+}
+
+.task-assignees {
+  display: flex;
+  margin-left: auto;
+}
+
+.task-assignee {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+  margin-left: -6px;
+  border: 2px solid var(--bg-card);
+}
+
+.task-assignee:first-child { margin-left: 0; }
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-yapilacak { background: var(--text-muted); }
+.status-devam { background: var(--accent); }
+.status-inceleme { background: var(--purple); }
+.status-tamamlandi { background: var(--green); }
+
+/* ===== ADD TASK BUTTON ===== */
+.add-task-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-size: 13px;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 8px;
+}
+
+.add-task-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+
+/* ===== RIGHT PANEL ===== */
+.right-panel {
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+  padding: 20px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.panel-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  text-align: center;
+  gap: 12px;
+}
+
+.panel-empty svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.3;
+}
+
+.panel-empty p {
+  font-size: 13px;
+}
+
+.detail-section {
+  margin-bottom: 20px;
+}
+
+.detail-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.detail-title-input {
+  width: 100%;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  background: none;
+  border: none;
+  color: var(--text);
+  outline: none;
+  padding: 4px 0;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.detail-row-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  min-width: 80px;
+}
+
+.detail-row-value {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.detail-select {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  flex: 1;
+}
+.detail-select:focus { border-color: var(--accent); }
+
+.detail-date-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  outline: none;
+  flex: 1;
+}
+.detail-date-input:focus { border-color: var(--accent); }
+
+/* Assignee checkboxes */
+.assignee-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.assignee-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-dim);
+  transition: all 0.15s;
+  user-select: none;
+}
+
+.assignee-chip.active {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+  color: var(--text);
+}
+
+/* Comments */
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 260px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.comment {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.comment-author {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.comment-time {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.comment-delete {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 2px;
+  margin-left: 6px;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+.comment:hover .comment-delete {
+  opacity: 1;
+}
+
+.comment-delete:hover {
+  color: var(--red);
+}
+
+.comment-text {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.comment-input-area {
+  display: flex;
+  gap: 8px;
+}
+
+.comment-input {
+  flex: 1;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  outline: none;
+  resize: none;
+}
+.comment-input:focus { border-color: var(--accent); }
+
+.comment-send {
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+.comment-send:hover { opacity: 0.85; }
+
+.delete-task-btn {
+  width: 100%;
+  padding: 10px;
+  background: var(--red-bg);
+  border: 1px solid rgba(239,68,68,0.2);
+  color: var(--red);
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: opacity 0.15s;
+}
+.delete-task-btn:hover { opacity: 0.8; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  width: 440px;
+  max-width: 90vw;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.form-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  outline: none;
+}
+.form-input:focus { border-color: var(--accent); }
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.btn-cancel {
+  padding: 8px 18px;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-create {
+  padding: 8px 22px;
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ===== PROGRESS BAR ===== */
+.progress-container {
+  margin-top: 8px;
+}
+.progress-bar-bg {
+  height: 6px;
+  background: var(--bg);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.progress-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ===== COUNTDOWN ===== */
+.countdown-card {
+  background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(168,85,247,0.06));
+  border: 1px solid rgba(59,130,246,0.15);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+
+.countdown-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.countdown-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.countdown-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1100px) {
+  .main { grid-template-columns: 1fr; }
+  .sidebar, .right-panel { display: none; }
+  .stats-bar { display: none; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <div>
+      <div class="logo">
+        <span class="dot"></span>
+        RADIOVA
+      </div>
+      <div class="logo-sub">TEKNOFEST EH 2026</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="stats-bar" id="statsBar"></div>
+    <select class="user-select" id="currentUser">
+      <!-- populated by JS -->
+    </select>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <!-- Countdown -->
+    <div class="countdown-card">
+      <div class="countdown-title">Sonraki Teslim Tarihine</div>
+      <div class="countdown-value" id="countdown">--</div>
+      <div class="countdown-sub" id="countdownLabel">--</div>
+    </div>
+
+    <!-- Timeline -->
+    <div>
+      <div class="sidebar-section-title">Yarışma Takvimi</div>
+      <div class="timeline-list" id="timelineList"></div>
+    </div>
+
+    <!-- Progress -->
+    <div>
+      <div class="sidebar-section-title">Genel İlerleme</div>
+      <div class="progress-container">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressFill" style="width:0%; background: linear-gradient(90deg, var(--accent), var(--cyan));"></div>
+        </div>
+        <div class="progress-label" id="progressLabel">0 / 0 tamamlandı</div>
+      </div>
+    </div>
+
+    <!-- Team -->
+    <div>
+      <div class="sidebar-section-title">Takım Üyeleri</div>
+      <div class="team-grid" id="teamGrid"></div>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+    <div class="content-header">
+      <div class="content-title">Görevler</div>
+      <div class="filter-tabs" id="filterTabs">
+        <button class="filter-tab active" data-filter="all">Tümü</button>
+        <button class="filter-tab" data-filter="yapilacak">Yapılacak</button>
+        <button class="filter-tab" data-filter="devam">Devam</button>
+        <button class="filter-tab" data-filter="inceleme">İnceleme</button>
+        <button class="filter-tab" data-filter="tamamlandi">Tamamlandı</button>
+      </div>
+    </div>
+    <div class="tasks-list" id="tasksList"></div>
+    <button class="add-task-btn" id="addTaskBtn">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+      Yeni Görev Ekle
+    </button>
+  </main>
+
+  <!-- RIGHT PANEL -->
+  <aside class="right-panel" id="rightPanel">
+    <div class="panel-empty" id="panelEmpty">
+      <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      <p>Detaylarını görmek için<br>bir görev seçin</p>
+    </div>
+    <div id="panelContent" style="display:none;"></div>
+  </aside>
+
+</div>
+
+<!-- ADD TASK MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title">Yeni Görev Oluştur</div>
+    <div class="form-group">
+      <label class="form-label">Görev Başlığı</label>
+      <input class="form-input" id="newTaskTitle" placeholder="Örn: Anten tasarımı tamamlansın" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Öncelik</label>
+      <select class="form-input" id="newTaskPriority">
+        <option value="acil">Acil</option>
+        <option value="yuksek">Yüksek</option>
+        <option value="orta" selected>Orta</option>
+        <option value="dusuk">Düşük</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Kategori</label>
+      <select class="form-input" id="newTaskCategory">
+        <option value="ED">Elektronik Destek (ED)</option>
+        <option value="ET">Elektronik Taarruz (ET)</option>
+        <option value="Yazılım">Yazılım</option>
+        <option value="Donanım">Donanım</option>
+        <option value="Mekanik">Mekanik</option>
+        <option value="Rapor">Rapor / Dokümantasyon</option>
+        <option value="Lojistik">Lojistik</option>
+        <option value="Genel" selected>Genel</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Teslim Tarihi</label>
+      <input class="form-input" type="date" id="newTaskDeadline" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="modalCancel">İptal</button>
+      <button class="btn-create" id="modalCreate">Oluştur</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const MEMBERS = [
+  { id: 'beko', name: 'Beko', color: '#3b82f6' },
+  { id: 'beyza', name: 'Beyza', color: '#ef4444' },
+  { id: 'ural', name: 'Ural', color: '#22c55e' },
+  { id: 'civan', name: 'Civan', color: '#f97316' },
+  { id: 'hilmi', name: 'Hilmi', color: '#a855f7' },
+  { id: 'ela', name: 'Ela', color: '#06b6d4' },
+  { id: 'cem', name: 'Cem', color: '#eab308' },
+  { id: 'yagiz', name: 'Yağız', color: '#ec4899' },
+  { id: 'fatih', name: 'Fatih', color: '#10b981' },
+];
+
+const TIMELINE = [
+  { label: 'Son Başvuru', date: '2026-03-10', done: true },
+  { label: 'TYF Teslim', date: '2026-04-01', done: true },
+  { label: 'TYF Sonuçları', date: '2026-04-20', done: true },
+  { label: 'KTR Teslim', date: '2026-04-30', done: false },
+  { label: 'KTR Sonuçları', date: '2026-05-22', done: false },
+  { label: 'Video Teslim', date: '2026-07-14', done: false },
+  { label: 'Finalist Açıklaması', date: '2026-07-31', done: false },
+  { label: 'Yarışma', date: '2026-09-01', done: false },
+  { label: 'TEKNOFEST', date: '2026-09-30', done: false },
+];
+
+const PRIORITY_LABELS = { acil: 'Acil', yuksek: 'Yüksek', orta: 'Orta', dusuk: 'Düşük' };
+const STATUS_LABELS = { yapilacak: 'Yapılacak', devam: 'Devam Ediyor', inceleme: 'İnceleme', tamamlandi: 'Tamamlandı' };
+
+// Load from localStorage
+const STORAGE_VERSION = 'v2';
+function loadTasks() {
+  const ver = localStorage.getItem('radiova_version');
+  if (ver !== STORAGE_VERSION) {
+    localStorage.removeItem('radiova_tasks');
+    localStorage.setItem('radiova_version', STORAGE_VERSION);
+  }
+  const saved = localStorage.getItem('radiova_tasks');
+  if (saved) return JSON.parse(saved);
+  return getDefaultTasks();
+}
+
+function saveTasks() {
+  localStorage.setItem('radiova_tasks', JSON.stringify(tasks));
+}
+
+function getDefaultTasks() {
+  return [
+    {
+      id: 1, title: 'Takım için atölye/çalışma alanı ayarlanacak',
+      priority: 'acil', status: 'devam', category: 'Lojistik',
+      deadline: '2026-04-22', assignees: ['beko', 'civan'],
+      comments: [
+        { author: 'beko', text: 'Üniversite lab için izin başvurusu yapıldı, cevap bekleniyor.', time: '2026-04-18 14:30' },
+        { author: 'civan', text: 'Alternatif olarak teknopark ofisi de düşünebiliriz.', time: '2026-04-18 16:45' }
+      ]
+    },
+    {
+      id: 2, title: 'KTR Raporu - Sistem Mimarisi Bölümü',
+      priority: 'acil', status: 'devam', category: 'Rapor',
+      deadline: '2026-04-28', assignees: ['ela', 'cem'],
+      comments: [
+        { author: 'ela', text: 'DKB ve YKB listesi hazırlandı, blok diyagram çizilecek.', time: '2026-04-19 10:00' }
+      ]
+    },
+    {
+      id: 3, title: 'SDR Alıcı - Sinyal Tespiti Algoritması Geliştirme',
+      priority: 'yuksek', status: 'devam', category: 'ED',
+      deadline: '2026-05-10', assignees: ['beyza', 'hilmi'],
+      comments: []
+    },
+    {
+      id: 4, title: 'Yön Bulma Anten Dizisi Tasarımı',
+      priority: 'yuksek', status: 'yapilacak', category: 'Donanım',
+      deadline: '2026-05-15', assignees: ['yagiz'],
+      comments: []
+    },
+    {
+      id: 5, title: 'RF Karıştırma Modülü Prototipi',
+      priority: 'orta', status: 'yapilacak', category: 'ET',
+      deadline: '2026-06-01', assignees: ['cem', 'civan'],
+      comments: []
+    },
+    {
+      id: 6, title: 'Kullanıcı Arayüzü (GUI) İlk Tasarımı',
+      priority: 'orta', status: 'devam', category: 'Yazılım',
+      deadline: '2026-05-20', assignees: ['fatih', 'beko'],
+      comments: [
+        { author: 'fatih', text: 'Figma üzerinden wireframe paylaşıldı, geri bildirim bekliyorum.', time: '2026-04-17 09:20' }
+      ]
+    },
+    {
+      id: 7, title: 'GPS L1 Aldatma Sinyali Üretimi Araştırması',
+      priority: 'yuksek', status: 'yapilacak', category: 'ET',
+      deadline: '2026-06-10', assignees: ['beyza', 'yagiz'],
+      comments: []
+    },
+    {
+      id: 8, title: 'Modülasyon Tanıma (AMR) için ML Modeli',
+      priority: 'orta', status: 'yapilacak', category: 'ED',
+      deadline: '2026-06-15', assignees: ['hilmi', 'ela'],
+      comments: []
+    },
+    {
+      id: 9, title: 'Sistem Tanımlama Videosu Çekimi Planlama',
+      priority: 'dusuk', status: 'yapilacak', category: 'Rapor',
+      deadline: '2026-07-10', assignees: ['ural'],
+      comments: []
+    },
+    {
+      id: 10, title: 'Mekanik Kasa ve Montaj Tasarımı',
+      priority: 'orta', status: 'yapilacak', category: 'Mekanik',
+      deadline: '2026-06-20', assignees: ['civan', 'yagiz'],
+      comments: []
+    }
+  ];
+}
+
+let tasks = loadTasks();
+let selectedTaskId = null;
+let activeFilter = 'all';
+let currentUserId = 'beko';
+
+// ===== RENDER FUNCTIONS =====
+
+function renderStats() {
+  const total = tasks.length;
+  const done = tasks.filter(t => t.status === 'tamamlandi').length;
+  const urgent = tasks.filter(t => t.priority === 'acil' && t.status !== 'tamamlandi').length;
+  const inProgress = tasks.filter(t => t.status === 'devam').length;
+  document.getElementById('statsBar').innerHTML = `
+    <div class="stat-item"><span class="stat-num" style="color:var(--text)">${total}</span> görev</div>
+    <div class="stat-item"><span class="stat-num" style="color:var(--green)">${done}</span> bitti</div>
+    <div class="stat-item"><span class="stat-num" style="color:var(--red)">${urgent}</span> acil</div>
+    <div class="stat-item"><span class="stat-num" style="color:var(--accent)">${inProgress}</span> devam</div>
+  `;
+}
+
+function renderTimeline() {
+  const today = new Date();
+  document.getElementById('timelineList').innerHTML = TIMELINE.map(t => {
+    const d = new Date(t.date);
+    const isPast = d < today;
+    const color = t.done ? 'var(--green)' : isPast ? 'var(--red)' : 'var(--text-muted)';
+    const formatted = d.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short' });
+    return `<div class="timeline-item">
+      <div class="timeline-dot" style="background:${color}"></div>
+      <span style="color:${t.done ? 'var(--text-dim)' : 'var(--text)'}; text-decoration:${t.done ? 'line-through' : 'none'}">${t.label}</span>
+      <span class="timeline-date">${formatted}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderCountdown() {
+  const today = new Date();
+  const next = TIMELINE.find(t => !t.done);
+  if (!next) {
+    document.getElementById('countdown').textContent = '✓';
+    document.getElementById('countdownLabel').textContent = 'Tüm aşamalar tamamlandı';
+    return;
+  }
+  const d = new Date(next.date);
+  const diff = Math.ceil((d - today) / (1000*60*60*24));
+  document.getElementById('countdown').textContent = diff + ' gün';
+  document.getElementById('countdownLabel').textContent = next.label;
+}
+
+function renderProgress() {
+  const total = tasks.length;
+  const done = tasks.filter(t => t.status === 'tamamlandi').length;
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${done} / ${total} tamamlandı (${pct}%)`;
+}
+
+function renderTeam() {
+  document.getElementById('teamGrid').innerHTML = MEMBERS.map(m => {
+    const count = tasks.filter(t => t.assignees.includes(m.id) && t.status !== 'tamamlandi').length;
+    return `<div class="team-member">
+      <div class="member-avatar" style="background:${m.color}">${m.name[0]}</div>
+      <div>
+        <div style="font-size:12px; font-weight:600;">${m.name}</div>
+        <div style="font-size:10px; color:var(--text-muted)">${count} aktif</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderUserSelect() {
+  document.getElementById('currentUser').innerHTML = MEMBERS.map(m =>
+    `<option value="${m.id}" ${m.id === currentUserId ? 'selected' : ''}>👤 ${m.name}</option>`
+  ).join('');
+}
+
+function renderTasks() {
+  let filtered = tasks;
+  if (activeFilter !== 'all') {
+    filtered = tasks.filter(t => t.status === activeFilter);
+  }
+
+  // Sort: acil first, then by deadline
+  const priorityOrder = { acil: 0, yuksek: 1, orta: 2, dusuk: 3 };
+  filtered.sort((a, b) => {
+    if (priorityOrder[a.priority] !== priorityOrder[b.priority]) return priorityOrder[a.priority] - priorityOrder[b.priority];
+    return new Date(a.deadline) - new Date(b.deadline);
+  });
+
+  document.getElementById('tasksList').innerHTML = filtered.map(t => {
+    const deadlineDate = new Date(t.deadline);
+    const today = new Date();
+    const daysLeft = Math.ceil((deadlineDate - today) / (1000*60*60*24));
+    let deadlineColor = 'var(--text-dim)';
+    if (t.status !== 'tamamlandi') {
+      if (daysLeft < 0) deadlineColor = 'var(--red)';
+      else if (daysLeft <= 3) deadlineColor = 'var(--orange)';
+      else if (daysLeft <= 7) deadlineColor = 'var(--yellow)';
+    }
+
+    const assigneeHtml = t.assignees.map(aId => {
+      const m = MEMBERS.find(x => x.id === aId);
+      return m ? `<div class="task-assignee" title="${m.name}" style="background:${m.color}">${m.name[0]}</div>` : '';
+    }).join('');
+
+    return `<div class="task-card ${t.id === selectedTaskId ? 'selected' : ''}" data-id="${t.id}">
+      <div class="task-top">
+        <div class="task-title">${t.title}</div>
+        <span class="priority-badge priority-${t.priority}">${PRIORITY_LABELS[t.priority]}</span>
+      </div>
+      <div class="task-meta">
+        <div class="task-meta-item">
+          <div class="status-dot status-${t.status}"></div>
+          ${STATUS_LABELS[t.status]}
+        </div>
+        <div class="task-meta-item" style="color:${deadlineColor}">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 12.5a5.5 5.5 0 110-11 5.5 5.5 0 010 11zM8.5 4h-1v4.3l3.1 1.8.5-.9-2.6-1.5V4z"/></svg>
+          ${deadlineDate.toLocaleDateString('tr-TR', { day:'2-digit', month:'short' })}
+          ${t.status !== 'tamamlandi' ? (daysLeft < 0 ? `(${Math.abs(daysLeft)}g gecikti)` : daysLeft === 0 ? '(Bugün!)' : `(${daysLeft}g kaldı)`) : ''}
+        </div>
+        <div class="task-meta-item">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v1H2zm0 3h12v1H2zm0 3h8v1H2z"/></svg>
+          ${t.category}
+        </div>
+        ${t.comments.length ? `<div class="task-meta-item">💬 ${t.comments.length}</div>` : ''}
+        <div class="task-assignees">${assigneeHtml}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Click handlers
+  document.querySelectorAll('.task-card').forEach(card => {
+    card.addEventListener('click', () => {
+      selectedTaskId = parseInt(card.dataset.id);
+      renderTasks();
+      renderDetail();
+    });
+  });
+}
+
+function renderDetail() {
+  const panel = document.getElementById('rightPanel');
+  const empty = document.getElementById('panelEmpty');
+  const content = document.getElementById('panelContent');
+
+  if (!selectedTaskId) {
+    empty.style.display = 'flex';
+    content.style.display = 'none';
+    return;
+  }
+
+  const task = tasks.find(t => t.id === selectedTaskId);
+  if (!task) return;
+
+  empty.style.display = 'none';
+  content.style.display = 'block';
+
+  const assigneeChips = MEMBERS.map(m => {
+    const active = task.assignees.includes(m.id);
+    return `<span class="assignee-chip ${active ? 'active' : ''}" data-member="${m.id}">
+      <div style="width:16px;height:16px;border-radius:50%;background:${m.color};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff">${m.name[0]}</div>
+      ${m.name}
+    </span>`;
+  }).join('');
+
+  const commentsHtml = task.comments.map((c, idx) => {
+    const m = MEMBERS.find(x => x.id === c.author);
+    return `<div class="comment">
+      <div class="comment-header">
+        <div style="width:20px;height:20px;border-radius:50%;background:${m ? m.color : '#666'};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff">${m ? m.name[0] : '?'}</div>
+        <span class="comment-author">${m ? m.name : c.author}</span>
+        <span class="comment-time">${c.time}</span>
+        <button class="comment-delete" data-comment-idx="${idx}" title="Yorumu sil">✕</button>
+      </div>
+      <div class="comment-text">${c.text}</div>
+    </div>`;
+  }).join('');
+
+  content.innerHTML = `
+    <div class="detail-section">
+      <div class="detail-label">Görev</div>
+      <input class="detail-title-input" id="detailTitle" value="${task.title}" />
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-row">
+        <span class="detail-row-label">Durum</span>
+        <select class="detail-select" id="detailStatus">
+          ${Object.entries(STATUS_LABELS).map(([k,v]) => `<option value="${k}" ${k===task.status?'selected':''}>${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="detail-row">
+        <span class="detail-row-label">Öncelik</span>
+        <select class="detail-select" id="detailPriority">
+          ${Object.entries(PRIORITY_LABELS).map(([k,v]) => `<option value="${k}" ${k===task.priority?'selected':''}>${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="detail-row">
+        <span class="detail-row-label">Kategori</span>
+        <select class="detail-select" id="detailCategory">
+          ${['ED','ET','Yazılım','Donanım','Mekanik','Rapor','Lojistik','Genel'].map(c => `<option value="${c}" ${c===task.category?'selected':''}>${c}</option>`).join('')}
+        </select>
+      </div>
+      <div class="detail-row">
+        <span class="detail-row-label">Teslim</span>
+        <input class="detail-date-input" type="date" id="detailDeadline" value="${task.deadline}" />
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-label">Atanan Kişiler</div>
+      <div class="assignee-checkboxes" id="assigneeChips">${assigneeChips}</div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-label">Yorumlar (${task.comments.length})</div>
+      <div class="comments-list">${commentsHtml || '<div style="font-size:12px;color:var(--text-muted);padding:8px">Henüz yorum yok</div>'}</div>
+      <div class="comment-input-area">
+        <input class="comment-input" id="commentInput" placeholder="${currentUserName()} olarak yorum yaz..." />
+        <button class="comment-send" id="commentSend">Gönder</button>
+      </div>
+    </div>
+
+    <button class="delete-task-btn" id="deleteTaskBtn">Görevi Sil</button>
+  `;
+
+  // Event listeners for detail panel
+  document.getElementById('detailTitle').addEventListener('change', e => {
+    task.title = e.target.value;
+    saveTasks(); renderTasks(); renderStats();
+  });
+
+  document.getElementById('detailStatus').addEventListener('change', e => {
+    task.status = e.target.value;
+    saveTasks(); renderAll();
+  });
+
+  document.getElementById('detailPriority').addEventListener('change', e => {
+    task.priority = e.target.value;
+    saveTasks(); renderAll();
+  });
+
+  document.getElementById('detailCategory').addEventListener('change', e => {
+    task.category = e.target.value;
+    saveTasks(); renderTasks();
+  });
+
+  document.getElementById('detailDeadline').addEventListener('change', e => {
+    task.deadline = e.target.value;
+    saveTasks(); renderTasks();
+  });
+
+  document.querySelectorAll('.assignee-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const mid = chip.dataset.member;
+      if (task.assignees.includes(mid)) {
+        task.assignees = task.assignees.filter(a => a !== mid);
+      } else {
+        task.assignees.push(mid);
+      }
+      saveTasks(); renderDetail(); renderTasks(); renderTeam();
+    });
+  });
+
+  document.getElementById('commentSend').addEventListener('click', () => {
+    const input = document.getElementById('commentInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const now = new Date();
+    const timeStr = now.toISOString().slice(0,10) + ' ' + now.toTimeString().slice(0,5);
+    task.comments.push({ author: currentUserId, text, time: timeStr });
+    saveTasks(); renderDetail(); renderTasks();
+  });
+
+  document.getElementById('commentInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('commentSend').click();
+  });
+
+  document.querySelectorAll('.comment-delete').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.commentIdx);
+      task.comments.splice(idx, 1);
+      saveTasks(); renderDetail(); renderTasks();
+    });
+  });
+
+  document.getElementById('deleteTaskBtn').addEventListener('click', () => {
+    if (confirm('Bu görevi silmek istediğinize emin misiniz?')) {
+      tasks = tasks.filter(t => t.id !== selectedTaskId);
+      selectedTaskId = null;
+      saveTasks(); renderAll();
+    }
+  });
+}
+
+function currentUserName() {
+  const m = MEMBERS.find(x => x.id === currentUserId);
+  return m ? m.name : '';
+}
+
+function renderAll() {
+  renderStats();
+  renderTimeline();
+  renderCountdown();
+  renderProgress();
+  renderTeam();
+  renderTasks();
+  renderDetail();
+}
+
+// ===== EVENTS =====
+
+// Filter tabs
+document.getElementById('filterTabs').addEventListener('click', e => {
+  if (e.target.classList.contains('filter-tab')) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    e.target.classList.add('active');
+    activeFilter = e.target.dataset.filter;
+    renderTasks();
+  }
+});
+
+// User select
+document.getElementById('currentUser').addEventListener('change', e => {
+  currentUserId = e.target.value;
+  if (selectedTaskId) renderDetail();
+});
+
+// Add task modal
+document.getElementById('addTaskBtn').addEventListener('click', () => {
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('newTaskTitle').value = '';
+  document.getElementById('newTaskDeadline').value = '';
+  setTimeout(() => document.getElementById('newTaskTitle').focus(), 100);
+});
+
+document.getElementById('modalCancel').addEventListener('click', () => {
+  document.getElementById('modalOverlay').classList.remove('open');
+});
+
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+});
+
+document.getElementById('modalCreate').addEventListener('click', () => {
+  const title = document.getElementById('newTaskTitle').value.trim();
+  if (!title) return;
+  const newTask = {
+    id: Date.now(),
+    title,
+    priority: document.getElementById('newTaskPriority').value,
+    status: 'yapilacak',
+    category: document.getElementById('newTaskCategory').value,
+    deadline: document.getElementById('newTaskDeadline').value || '2026-06-01',
+    assignees: [currentUserId],
+    comments: []
+  };
+  tasks.push(newTask);
+  saveTasks();
+  document.getElementById('modalOverlay').classList.remove('open');
+  selectedTaskId = newTask.id;
+  renderAll();
+});
+
+// Keyboard shortcut
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+  if (e.key === 'n' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA' && document.activeElement.tagName !== 'SELECT') {
+    document.getElementById('addTaskBtn').click();
+  }
+});
+
+// ===== INIT =====
+renderUserSelect();
+renderAll();
+</script>
+</body>
+</html>
